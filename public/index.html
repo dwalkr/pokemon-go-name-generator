@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pokemon Name Generator</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <link rel="stylesheet" href="/css/style.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    <head>
+    <body>
+        <div class="container">
+            <h1>Pokemon Name Generator</h1>
+            <h2>Your Pokemon's Name Is:</h2>
+            <div id="generatedName"><span></span></div> 
+            <button id="generateName">New Name</button>
+        </div>
+        <script>
+            (function($){
+                var $currentName = $('#generatedName > span');
+                var $newName;
+                $(document).ready(function(){
+                    console.log($currentName);
+                    $('#generateName').click(function(){
+                        console.log($currentName);
+                        $currentName.bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(){
+                            $(this).remove();
+                        }).addClass('out');
+                        $.get('/generate', function(data){
+                            $currentName = $newName;
+                            $newName = $('<span></span>');
+                            $newName.text(data).appendTo($('#generatedName'));
+                        },'text');
+                    });
+                    $('#generateName').trigger('click');
+                });
+            })(jQuery);
+        </script>
+    </body>
+</html>
