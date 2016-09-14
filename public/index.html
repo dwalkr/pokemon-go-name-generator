@@ -25,9 +25,10 @@
                             $(this).remove();
                         }).addClass('out');
                         $.get('/generate', function(data){
-                            $currentName = $newName;
+                            
                             $newName = $('<span></span>');
                             $newName.text(data).appendTo($('#generatedName'));
+                            $currentName = $newName;
                         },'text');
                     });
                     $('#generateName').trigger('click');
