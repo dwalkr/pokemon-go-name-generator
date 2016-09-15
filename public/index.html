@@ -15,20 +15,30 @@
         </div>
         <script>
             (function($){
-                var $currentName = $('#generatedName > span');
-                var $newName;
+                var busy = false;
                 $(document).ready(function(){
-                    console.log($currentName);
-                    $('#generateName').click(function(){
-                        console.log($currentName);
-                        $currentName.bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(){
+                    $('#generateName').click(function(e){
+                        if (busy) {
+                            return false;
+                        }
+                        busy = true;
+                        $('#generatedName span').animate({
+                            top: '2em',
+                            opacity: 0
+                        }, 200, function(){
                             $(this).remove();
-                        }).addClass('out');
+                        });
                         $.get('/generate', function(data){
-                            
-                            $newName = $('<span></span>');
+                            $newName = $('<span></span>').css({
+                                top: 0,
+                                opacity: 0,
+                            });
                             $newName.text(data).appendTo($('#generatedName'));
-                            $currentName = $newName;
+                            $newName.animate({
+                                top: '1em',
+                                opacity: 1,
+                            }, 200);
+                            busy = false;
                         },'text');
                     });
                     $('#generateName').trigger('click');

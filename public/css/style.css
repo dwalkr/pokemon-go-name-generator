@@ -27,6 +27,7 @@ h2 {
     font-size: .8em;
 }
 #generatedName {
+    overflow: hidden;
     font-size: 2em;
     font-family: monospace;
     padding: 1em;
@@ -37,28 +38,23 @@ h2 {
 }
 
 #generatedName span {
+
+    
     will-change: transform;
     width: 100%;
     position: absolute;
     left: 0;
     display: block;
-    animation: slideIn 0.3s ease
+
 }
-#generatedName span.out {
+#geeneratedName span.in {
+    transform: translate3d(0,0,0);
+    opacity: 1;
+}
+#geneeratedName span.out {
     transition: all .25s ease;
     transform: translate3d(-120px,0,0);
     opacity: 0!important;
-}
-
-@keyframes slideIn {
-    0% {
-        transform: translate3d(120px,0,0);
-        opacity: 0;
-    }
-    100% {
-        transform: translate3d(0,0,0);
-        opacity: 1;
-    }
 }
 
 #generateName {
