@@ -7,7 +7,7 @@
 
     function loadNames() {
         var names = JSON.parse(localStorage.getItem('favoriteNames'));
-        if (names.constructor == Array) {
+        if (names && names.constructor == Array) {
             favorites = names;
         } else {
             favorites = [];
