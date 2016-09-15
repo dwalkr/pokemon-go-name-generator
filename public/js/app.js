@@ -30,7 +30,6 @@
     }
 
     function removeName(index) {
-        console.log(index);
         favorites.splice(index, 1);
         persistFavorites();
         refreshFavorites();
@@ -97,7 +96,6 @@
             return addName($('#generatedName span').last().text());
         });
         $("body").on("click",".removeName", function(){
-            console.log($(this).parents('li'));
             removeName($(this).parents('li').data('index'));
         });
         $('#generateName').trigger('click');
