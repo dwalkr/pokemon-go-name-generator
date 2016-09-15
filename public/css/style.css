@@ -1,75 +1,148 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #18818c;
+    color: rgba(255,255,255,0.7);
+    font-family: sans-serif;
+}
 * {
     box-sizing: border-box;
 }
-body {
-    border: 0;
-    margin: 0;
-    padding: 0;
-    background: #7663a1;
-    font-family: sans-serif;
-    color: #082934;
-    padding-top: 2em;
-    min-height: 100vh;
-}
-.container {
-    max-width: 40em; 
-    margin: 0 auto;
-    padding: 2em;
-    background: #568493;
-    margin-top: 2em;
-    box-shadow: 6px 10px rgba(0,0,0,0.3);
-}
+
 h1 {
-    margin-top: 0;
+    color: #FFE4AC;
 }
 h2 {
-    margin-bottom: 0;
-    font-size: .8em;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    max-width: 90%;
+    padding-bottom: .3em;
 }
+
+.container {
+    padding: 2em 1em;
+    max-width: 65em;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.row {
+    margin: 0 -1em;
+}
+
+.generator, .favorites {
+    float: left;
+    padding: 1em;
+}
+
+.generator {
+    width: calc(200%/3);
+}
+
+.favorites {
+    width: calc(100%/3)
+}
+
 #generatedName {
     overflow: hidden;
     font-size: 2em;
     font-family: monospace;
     padding: 1em;
     text-align: center;
-    color: #bfec85;
     position: relative;
     height: 3.4em;
+    color: #FFE4AC;
 }
 
-#generatedName span {
-
-    
+#generatedName span {  
     will-change: transform;
     width: 100%;
     position: absolute;
     left: 0;
     display: block;
-
-}
-#geeneratedName span.in {
-    transform: translate3d(0,0,0);
-    opacity: 1;
-}
-#geneeratedName span.out {
-    transition: all .25s ease;
-    transform: translate3d(-120px,0,0);
-    opacity: 0!important;
 }
 
-#generateName {
-    width: 100%;
-    display: block;
+#generatedName span.favorite {
+    color: #F2C25D;
+}
+
+button {
+    display: inline-block;
     border: none;
     outline: none;
     box-shadow: none;
-    padding: 1.2em 1em;
-    background: #082934;
-    color: #fff;
+    padding: 1em;
     font-size: 1.2em;
     font-weight: bold;
     cursor: pointer;
 }
-#generateName:active {
-    transform: translateY(2px);
+
+.name-actions {
+    text-align: center;
+}
+
+.name-actions button {
+    margin-bottom: .5em;
+    background-color: #01535B;
+    color: rgba(255,255,255,0.8);
+}
+
+#addToFavorites {
+    transition: background-color .2s ease;
+}
+
+.generator.is-favorite #addToFavorites {
+    background-color: #F2C25D;
+    /*display: inline;
+    background: transparent;
+    padding: 0;
+    font-size: 1em;
+    color: #F2C25D;*/
+}
+
+#favoritesList {
+    margin: 0;
+    padding: 0;
+}
+
+#favoritesList li {
+    list-style: none;
+    margin-bottom: .8em;
+    position: relative;
+    padding-right: 2em;
+    font-family: monospace;
+    font-size: 1.1em;
+}
+
+.removeName {
+    background: transparent;
+    position: absolute;
+    right: 1em;
+    padding: 0;
+    color: #FFB0AC;
+}
+
+@media(min-width: 881px) {
+    #favoritesList {
+        max-height: 30em;
+        overflow-y: auto;
+    }
+}
+
+@media(max-width: 880px) {
+    .generator, .favorites {
+        width: 100%;
+        float: none;
+    }
+    #favoritesList {
+        margin: 0 -1em;
+    }
+    #favoritesList li {
+        display: inline-block;
+        margin: 0;
+        padding: 1em;
+    }
+    #favoritesList .removeName {
+        position: static;
+        margin: 4px 0 0 4px;
+    }
 }

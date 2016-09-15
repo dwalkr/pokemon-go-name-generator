@@ -2,48 +2,32 @@
 <html>
     <head>
         <title>Pokemon Name Generator</title>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/app.js"></script>
         <link rel="stylesheet" href="/css/style.css" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
     <head>
     <body>
         <div class="container">
             <h1>Pokemon Name Generator</h1>
-            <h2>Your Pokemon's Name Is:</h2>
-            <div id="generatedName"><span></span></div> 
-            <button id="generateName">New Name</button>
+            <div class="row">
+                <div class="generator">
+                    <div class="inner">
+                        <h2>Your Pokemon's Name Is</h2>
+                        <div id="generatedName"><span></span></div> 
+                        <div class="name-actions">
+                            <button id="generateName">New Name</button>
+                            <button id="addToFavorites">&#9733;</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="favorites">
+                    <div class="inner">
+                        <h2>Favorites</h2>
+                        <ul id="favoritesList"></ul>
+                    </div>
+                </div>
+            </div>
         </div>
-        <script>
-            (function($){
-                var busy = false;
-                $(document).ready(function(){
-                    $('#generateName').click(function(e){
-                        if (busy) {
-                            return false;
-                        }
-                        busy = true;
-                        $('#generatedName span').animate({
-                            top: '2em',
-                            opacity: 0
-                        }, 200, function(){
-                            $(this).remove();
-                        });
-                        $.get('/generate', function(data){
-                            $newName = $('<span></span>').css({
-                                top: 0,
-                                opacity: 0,
-                            });
-                            $newName.text(data).appendTo($('#generatedName'));
-                            $newName.animate({
-                                top: '1em',
-                                opacity: 1,
-                            }, 200);
-                            busy = false;
-                        },'text');
-                    });
-                    $('#generateName').trigger('click');
-                });
-            })(jQuery);
-        </script>
     </body>
 </html>
