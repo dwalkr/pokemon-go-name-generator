@@ -12,6 +12,18 @@ import (
 	"github.com/codegangsta/negroni"
 )
 
+var firstPart []string
+var lastPart []string
+
+func loadData() {
+	first, _ := getNames("data/first")
+	last, _ := getNames("data/last")
+	either, _ := getNames("data/either")
+
+	firstPart = append(first, either...)
+	lastPart = append(last, either...)
+}
+
 func getNames(filename string) ([]string, error) {
 	file, err := os.Open(filename)
 	if err != nil {
@@ -31,15 +43,9 @@ func getNames(filename string) ([]string, error) {
 }
 
 func GenerateName(maxLength int) string {
-	first, _ := getNames("data/first")
-	last, _ := getNames("data/last")
-	either, _ := getNames("data/either")
 
-	allFirst := append(first, either...)
-	allLast := append(last, either...)
-
-	finalFirst := strings.Trim(allFirst[rand.Intn(len(allFirst))], " ")
-	finalLast := strings.Trim(allLast[rand.Intn(len(allLast))], " ")
+	finalFirst := strings.Trim(firstPart[rand.Intn(len(firstPart))], " ")
+	finalLast := strings.Trim(lastPart[rand.Intn(len(lastPart))], " ")
 
 	finalName := finalFirst + finalLast
 
@@ -55,6 +61,7 @@ func NameHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	loadData()
 	rand.Seed(time.Now().UnixNano())
 	mux := http.NewServeMux()
 	mux.HandleFunc("/generate", NameHandler)
