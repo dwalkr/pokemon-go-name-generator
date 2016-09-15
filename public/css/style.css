@@ -66,6 +66,7 @@ h2 {
 }
 
 button {
+    line-height: 1;
     display: inline-block;
     border: none;
     outline: none;
