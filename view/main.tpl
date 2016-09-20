@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Pokemon Name Generator</title>
+        <title>{{template "title" .}}</title>
         <script src="/js/jquery.min.js"></script>
         <script src="/js/app.js"></script>
         <link rel="stylesheet" href="/css/style.css" />
@@ -16,25 +16,8 @@
     <head>
     <body>
         <div class="container">
-            <h1>Pokemon Name Generator</h1>
-            <div class="row">
-                <div class="generator">
-                    <div class="inner">
-                        <h2>Your Pokemon's Name Is</h2>
-                        <div id="generatedName"><span></span></div> 
-                        <div class="name-actions">
-                            <button id="generateName">New Name</button>
-                            <button id="addToFavorites">&#9733;</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="favorites">
-                    <div class="inner">
-                        <h2>Favorites</h2>
-                        <ul id="favoritesList"></ul>
-                    </div>
-                </div>
-            </div>
+            <h1>{{template "title" .}}</h1>
+            {{template "content" .}}
         </div>
     </body>
 </html>

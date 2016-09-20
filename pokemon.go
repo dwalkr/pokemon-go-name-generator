@@ -2,18 +2,31 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
+	"fmt"
+	"html/template"
 	"math/rand"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 	"unicode/utf8"
 
 	"github.com/codegangsta/negroni"
+	"github.com/gorilla/mux"
 )
 
 var firstPart []string
 var lastPart []string
+
+var homeTemplate = template.Must(template.ParseFiles("view/main.tpl", "view/index.tpl"))
+var lipsumTemplate = template.Must(template.ParseFiles("view/main.tpl", "view/lipsum.tpl"))
+
+type TextResponse struct {
+	Status string   `json:status`
+	Data   []string `json:data`
+}
 
 func loadData() {
 	first, _ := getNames("data/first")
@@ -56,15 +69,78 @@ func GenerateName(maxLength int) string {
 	return finalName
 }
 
+func GenerateNameWrapper() string {
+	return GenerateName(100)
+}
+
+func GenerateLipsum(numParagraphs uint8) []string {
+	return lipsumGenerateParagraphs(numParagraphs, GenerateNameWrapper)
+}
+
 func NameHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte(GenerateName(12)))
+	vars := mux.Vars(r)
+	var resp = &TextResponse{}
+	numNames, err := strconv.ParseUint(vars["quantity"], 10, 8)
+	if err != nil || numNames < 1 {
+		numNames = 1
+	}
+	var names []string
+	for i := 0; i < int(numNames); i++ {
+		names = append(names, GenerateName(12))
+	}
+	resp.Status = "success"
+	resp.Data = names
+	js, err := json.Marshal(resp)
+	if err != nil {
+		fmt.Printf("%v\n", err)
+	}
+	fmt.Println(js)
+	fmt.Printf("%v\n", resp)
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(js)
+}
+
+func LipsumHander(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	var resp = &TextResponse{}
+	paragraphs, err := strconv.ParseUint(vars["paragraphs"], 10, 8)
+	if err != nil || paragraphs < 1 {
+		paragraphs = 3
+	}
+	resp.Status = "success"
+	resp.Data = GenerateLipsum(uint8(paragraphs))
+	json, err := json.Marshal(resp)
+	if err != nil {
+		fmt.Printf("%v\n", err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(json)
+}
+
+func IndexHandler(w http.ResponseWriter, r *http.Request) {
+	homeTemplate.Execute(w, nil)
+}
+func LipsumFrontHandler(w http.ResponseWriter, r *http.Request) {
+	lipsumTemplate.Execute(w, nil)
 }
 
 func main() {
+	// TODO: Lorem Ipsum
 	loadData()
 	rand.Seed(time.Now().UnixNano())
+
+	router := mux.NewRouter()
+
+	router.HandleFunc("/", IndexHandler)
+	router.HandleFunc("/lipsum", LipsumFrontHandler)
+
+	router.HandleFunc("/generate", NameHandler)
+	router.HandleFunc("/generate/{quantity:[0-9]+}", NameHandler)
+	router.HandleFunc("/generate/lipsum", LipsumHander)
+	router.HandleFunc("/generate/lipsum/{paragraphs:[0-9]+}", LipsumHander)
+
 	mux := http.NewServeMux()
-	mux.HandleFunc("/generate", NameHandler)
+	mux.Handle("/", router)
 	n := negroni.Classic()
 	n.UseHandler(mux)
 	n.Run(":8080")

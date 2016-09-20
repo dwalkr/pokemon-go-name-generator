@@ -77,7 +77,7 @@
                     top: 0,
                     opacity: 0,
                 });
-                $newName.text(data);
+                $newName.text(data.Data[0]);
                 //$favoriteButton.appendTo($newName);
                 $newName.appendTo($('#generatedName'));
                 $newName.animate({
@@ -86,8 +86,20 @@
                 }, 200);
                 refreshGeneratedNameAttributes()
                 busy = false;
-            },'text');
+            },'json');
         });
+        $('#generateLipsum').click(function(e){
+            e.preventDefault();
+            var numParas = $('[name="num_paras"]').val();
+            $.get('/generate/lipsum/'+numParas, function(data){
+                var $newText = $('<div></div>')
+                for (var para in data.Data) {
+                    var $p = $('<p></p>').text(data.Data[para]);
+                    $p.appendTo($newText);
+                }
+                $('#generatedLipsum').html($newText.html());
+            }, 'json');
+        })
         $('body').on('click','#addToFavorites',function(){
             nameIndex = favorites.indexOf($('#generatedName span').last().text());
             if ( nameIndex >= 0) {
@@ -99,6 +111,7 @@
             removeName($(this).parents('li').data('index'));
         });
         $('#generateName').trigger('click');
+        $('#generateLipsum').trigger('click')
     });
 
 })(jQuery);

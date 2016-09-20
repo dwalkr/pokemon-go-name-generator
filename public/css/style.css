@@ -7,6 +7,8 @@ html, body {
 }
 * {
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
 
 h1 {
@@ -81,7 +83,7 @@ button {
     text-align: center;
 }
 
-.name-actions button {
+.name-actions button, #generateLipsum {
     margin-bottom: .5em;
     background-color: #01535B;
     color: rgba(255,255,255,0.8);
@@ -121,6 +123,36 @@ button {
     padding: 0;
     color: #FFB0AC;
 }
+.lipsumSelect label {
+    display: block;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+[type="text"] {
+    margin-bottom: .5em;
+    padding: .5em;
+    height: auto;
+    outline: none;
+    border: none;
+    box-shadow: none;
+    background: rgba(255,255,255,0.3);
+    font-family: monospace;
+    font-size: 1.1em;
+    color: #FFE4AC;
+    font-weight: bold;
+}
+[name="num_paras"] {
+    max-width: 3em;
+    text-align: right;
+}
+/*[name="num_paras"], #generateLipsum {
+    padding-top: .8em;
+    padding-bottom: .8em;
+    font-size: 1.2em;
+    line-height: 1.2;
+    height: auto;
+    margin-right: .5em;
+}*/
 
 @media(min-width: 881px) {
     #favoritesList {
