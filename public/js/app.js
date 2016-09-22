@@ -77,7 +77,7 @@
                     top: 0,
                     opacity: 0,
                 });
-                $newName.text(data.Data[0]);
+                $newName.text(data.data[0]);
                 //$favoriteButton.appendTo($newName);
                 $newName.appendTo($('#generatedName'));
                 $newName.animate({
@@ -93,8 +93,8 @@
             var numParas = $('[name="num_paras"]').val();
             $.get('/generate/lipsum/'+numParas, function(data){
                 var $newText = $('<div></div>')
-                for (var para in data.Data) {
-                    var $p = $('<p></p>').text(data.Data[para]);
+                for (var para in data.data) {
+                    var $p = $('<p></p>').text(data.data[para]);
                     $p.appendTo($newText);
                 }
                 $('#generatedLipsum').html($newText.html());

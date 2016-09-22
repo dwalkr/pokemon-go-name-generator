@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"encoding/json"
-	"fmt"
 	"html/template"
 	"math/rand"
 	"net/http"
@@ -24,8 +23,8 @@ var homeTemplate = template.Must(template.ParseFiles("view/main.tpl", "view/inde
 var lipsumTemplate = template.Must(template.ParseFiles("view/main.tpl", "view/lipsum.tpl"))
 
 type TextResponse struct {
-	Status string   `json:status`
-	Data   []string `json:data`
+	Status string   `json:"status"`
+	Data   []string `json:"data"`
 }
 
 func loadData() {
@@ -91,11 +90,6 @@ func NameHandler(w http.ResponseWriter, r *http.Request) {
 	resp.Status = "success"
 	resp.Data = names
 	js, err := json.Marshal(resp)
-	if err != nil {
-		fmt.Printf("%v\n", err)
-	}
-	fmt.Println(js)
-	fmt.Printf("%v\n", resp)
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(js)
 }
@@ -110,9 +104,6 @@ func LipsumHander(w http.ResponseWriter, r *http.Request) {
 	resp.Status = "success"
 	resp.Data = GenerateLipsum(uint8(paragraphs))
 	json, err := json.Marshal(resp)
-	if err != nil {
-		fmt.Printf("%v\n", err)
-	}
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(json)
 }
@@ -143,5 +134,7 @@ func main() {
 	mux.Handle("/", router)
 	n := negroni.Classic()
 	n.UseHandler(mux)
-	n.Run(":8080")
+
+	port := os.Getenv("PORT_NAMEGEN")
+	n.Run(":" + port)
 }
