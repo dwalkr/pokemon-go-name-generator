@@ -87,11 +87,40 @@ func NameHandler(w http.ResponseWriter, r *http.Request) {
 	for i := 0; i < int(numNames); i++ {
 		names = append(names, GenerateName(12))
 	}
+	if r.FormValue("nameFormat") == "capitalize" {
+		names = ucwords(names)
+	}
 	resp.Status = "success"
 	resp.Data = names
+	sendResponse(w, r, resp)
+}
+
+func sendResponse(w http.ResponseWriter, r *http.Request, resp *TextResponse) {
+	responseType := r.FormValue("format")
+	if responseType == "text" {
+		w.Header().Set("Content-Type", "text/plain")
+		w.Write([]byte(strings.Join(resp.Data, " ")))
+		return
+	}
 	js, err := json.Marshal(resp)
+	if err != nil {
+		w.Header().Set("Status", "500 Internal Server Error")
+	}
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(js)
+}
+
+func ucwords(words []string) []string {
+	for i := 0; i < len(words); i++ {
+		words[i] = ucfirst(words[i])
+	}
+	return words
+}
+
+func ucfirst(word string) string {
+	newWord := strings.ToUpper(string(word[0]))
+	newWord += word[1:]
+	return newWord
 }
 
 func LipsumHander(w http.ResponseWriter, r *http.Request) {
@@ -103,9 +132,7 @@ func LipsumHander(w http.ResponseWriter, r *http.Request) {
 	}
 	resp.Status = "success"
 	resp.Data = GenerateLipsum(uint8(paragraphs))
-	json, err := json.Marshal(resp)
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(json)
+	sendResponse(w, r, resp)
 }
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {

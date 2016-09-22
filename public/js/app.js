@@ -72,12 +72,14 @@
             }, 200, function(){
                 $(this).remove();
             });
-            $.get('/generate', function(data){
+            $.post('/generate', {
+                format: 'text'
+            }, function(data){
                 $newName = $('<span></span>').css({
                     top: 0,
                     opacity: 0,
                 });
-                $newName.text(data.data[0]);
+                $newName.text(data);
                 //$favoriteButton.appendTo($newName);
                 $newName.appendTo($('#generatedName'));
                 $newName.animate({
@@ -86,7 +88,7 @@
                 }, 200);
                 refreshGeneratedNameAttributes()
                 busy = false;
-            },'json');
+            },'text');
         });
         $('#generateLipsum').click(function(e){
             e.preventDefault();
